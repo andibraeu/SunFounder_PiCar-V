@@ -45,7 +45,7 @@
                 }
             } else if (enabled == true) {
                 console.log('message bekommen', message, driveVoters);
-                if (['ff', 'f', 'r', 'l', 'ww', 'w', 'a', 'd', 'z', 's'].includes(message.message) && !driveVoters.includes(message.from)) {
+                if (['ff', 'f', 'r', 'l', 'ww', 'w', 'a', 'd', 'b', 's'].includes(message.message) && !driveVoters.includes(message.from)) {
                     // collect votes
                     driveDict[message.message] += 1;
                     driveVoters.push(message.from);
@@ -114,7 +114,7 @@
                     fetch("http://" + robotIP + "/run/?action=forward")
                     setTimeout(stopMotor, drive_time)
                     break;
-                case 'z':
+                case 'b':
                 case 's':
                     fetch("http://" + robotIP + "/run/?action=backward")
                     setTimeout(stopMotor, drive_time)
@@ -179,11 +179,11 @@
         }
 
         function init_driveDict() {
-            return { 'z': 0, 's': 0, 'ff': 0, 'f': 0, 'l': 0, 'r': 0, 'ww': 0, 'w': 0, 'a': 0, 'd': 0}
+            return { 'b': 0, 's': 0, 'ff': 0, 'f': 0, 'l': 0, 'r': 0, 'ww': 0, 'w': 0, 'a': 0, 'd': 0}
         }
 
         function init_camDict() {
-            return { 'u': 0, 'i': 0, 'o': 0, 'j': 0, 'k': 0, 'l' :0 }
+            return { 'z': 0, 'u': 0, 'i': 0, 'h': 0, 'j': 0, 'k' :0, 'c': 0 }
         }
 
         function toggleRobot() {
