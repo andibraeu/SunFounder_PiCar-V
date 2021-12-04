@@ -34,7 +34,7 @@
 
         api.getAvailableDevices().then(devices => { console.log(devices, "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA") });
         api.on('incomingMessage', (message) => {
-            if (message.privateMessage && message.nick == window.config.adminUser) {
+            if (message.privateMessage && window.config.adminUsers.includes(message.nick)) {
                 console.log('wichtige nachricht bekommen');
                 if (['enable', 'disable'].includes(message.message)) {
                     enableOrDisableRobot(message.message);
