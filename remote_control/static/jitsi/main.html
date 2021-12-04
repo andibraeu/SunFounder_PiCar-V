@@ -29,8 +29,10 @@
         const api = new JitsiMeetExternalAPI(domain, options);
         // const devices = await api.getCurrentDevices();
         let enabled = true;
-        let dict = init_dict();
-        let voters = [];
+        let driveDict = init_driveDict();
+        let camDict = init_camDict();
+        let driveVoters = [];
+        let camVoters = [];
 
         api.getAvailableDevices().then(devices => { console.log(devices, "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA") });
         api.on('incomingMessage', (message) => {
@@ -42,19 +44,25 @@
                     console.log('would do ', message.message, ' from ', message.nick)
                 }
             } else if (enabled == true) {
-                console.log('message bekommen', message, voters);
-                if (['ff', 'f', 'r', 'l', 'ww', 'w', 'a', 'd', 'h', 'b', 'z', 's'].includes(message.message) && !voters.includes(message.from)) {
+                console.log('message bekommen', message, driveVoters);
+                if (['ff', 'f', 'r', 'l', 'ww', 'w', 'a', 'd', 'h', 'b', 'z', 's'].includes(message.message) && !driveVoters.includes(message.from)) {
                     // collect votes
-                    dict[message.message] += 1;
-                    voters.push(message.from);
-                    console.log("Vote", message.from, " voted for ", message.message, " Count ", dict);
+                    driveDict[message.message] += 1;
+                    driveVoters.push(message.from);
+                    console.log("Vote", message.from, " voted for ", message.message, " Count ", driveDict);
+                } else if (['c', 'u', 'i', 'o', 'j', 'k', 'l'].includes(message.message) && !camVoters.includes(message.from)) {
+                    // collect votes
+                    camDict[message.message] += 1;
+                    camVoters.push(message.from);
+                    console.log("Vote", message.from, " voted for ", message.message, " Count ", camDict);
                 }
+
             } else {
                 console.log("message ignored")
             }
         });
 
-        window.setInterval(function () { count_votes_and_drive() }, 1500);
+        window.setInterval(function () { count_drive_votes_and_drive() }, 1500);
 
         function enableOrDisableRobot(message) {
             if (enabled && message === 'disable') {
@@ -64,11 +72,11 @@
             }
         }
 
-        function count_votes_and_drive() {
+        function count_drive_votes_and_drive() {
             //console.log("couting votes", dict, voters)
             let highest = 0;
             let selection = "";
-            for (let [action, count] of Object.entries(dict)) {
+            for (let [action, count] of Object.entries(driveDict)) {
                 if (count >= highest) {
                     highest = count;
                     selection = action;
@@ -78,7 +86,7 @@
             if (highest === 0)
                 return;
 
-            console.log("action machen: ", selection, highest)
+            console.log("drive action machen: ", selection, highest)
             fetch("http://" + robotIP + "/run/?speed=40")
             let drive_time = 1400;
             switch (selection) {
@@ -110,24 +118,69 @@
                     fetch("http://" + robotIP + "/run/?action=backward")
                     setTimeout(stopMotor, drive_time)
                     break;
-                case 'h':
-                    fetch("http://" + robotIP + "/control?var=motor_both&val=0&val2=0")
-                    fetch("http://" + robotIP + "/control?var=lamp&val=0")
+                default:
                     break;
-                case 'b':
-                    fetch("http://" + robotIP + "/control?var=lamp&val=50")
-                    setTimeout(function () { fetch("http://" + robotIP + "/control?var=lamp&val=0") }, 3000);
+            };
+
+            driveDict = init_driveDict();
+            driveVoters = [];
+        }
+
+        function count_cam_votes_and_drive() {
+            let highest = 0;
+            let selection = "";
+            for (let [action, count] of Object.entries(camDict)) {
+                if (count >= highest) {
+                    highest = count;
+                    selection = action;
+                }
+            };
+
+            if (highest === 0)
+                return;
+
+            console.log("cam action machen: ", selection, highest)
+            switch (selection) {
+                case 'c':
+                    fetch("http://" + robotIP + "/run/?action=camready")
+                    break;
+                case 'u':
+                    fetch("http://" + robotIP + "/run/?action=camleft")
+                    fetch("http://" + robotIP + "/run/?action=camup")
+                    break;
+                case 'i':
+                    fetch("http://" + robotIP + "/run/?action=camready")
+                    fetch("http://" + robotIP + "/run/?action=camup")
+                    break;
+                case 'o':
+                    fetch("http://" + robotIP + "/run/?action=camright")
+                    fetch("http://" + robotIP + "/run/?action=camup")
+                    break;
+                case 'j':
+                    fetch("http://" + robotIP + "/run/?action=camleft")
+                    fetch("http://" + robotIP + "/run/?action=camready")
+                    break;
+                case 'k':
+                    fetch("http://" + robotIP + "/run/?action=camready")
+                    break;
+                case 'l':
+                    fetch("http://" + robotIP + "/run/?action=camright")
+                    fetch("http://" + robotIP + "/run/?action=camready")
                     break;
                 default:
                     break;
             };
 
-            dict = init_dict();
-            voters = [];
+            camDict = init_camDict();
+            camVoters = [];
         }
 
-        function init_dict() {
-            return { 'ff': 0, 'f': 0, 'l': 0, 'r': 0, 'ww': 0, 'w': 0, 'a': 0, 'd': 0, 'h': 0, 'b': 0, 'z': 0, 's': 0 }
+        function init_driveDict() {
+            return { 'ff': 0, 'f': 0, 'l': 0, 'r': 0, 'ww': 0, 'w': 0, 'a': 0, 'd': 0}
+        }
+
+        function init_camDict() {
+            return { 'z': 0, 's': 0, 'u': 0, 'i': 0, 'o': 0, 'j': 0, 'k': 0, 'l' :0 }
         }
 
         function toggleRobot() {
