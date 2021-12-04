@@ -34,7 +34,14 @@
 
         api.getAvailableDevices().then(devices => { console.log(devices, "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA") });
         api.on('incomingMessage', (message) => {
-            if (enabled == true) {
+            if (message.privateMessage && message.nick == window.config.adminUser) {
+                console.log('wichtige nachricht bekommen');
+                if (['enable', 'disable'].includes(message.message)) {
+                    enableOrDisableRobot(message.message);
+                } else if (['shutdown', 'reset', 'restart_cam'].includes(message.message)) {
+                    console.log('would do ', message.message, ' from ', message.nick)
+                }
+            } else if (enabled == true) {
                 console.log('message bekommen', message, voters);
                 if (['ff', 'f', 'r', 'l', 'ww', 'w', 'a', 'd', 'h', 'b', 'z', 's'].includes(message.message) && !voters.includes(message.from)) {
                     // collect votes
@@ -48,6 +55,14 @@
         });
 
         window.setInterval(function () { count_votes_and_drive() }, 1500);
+
+        function enableOrDisableRobot(message) {
+            if (enabled && message === 'disable') {
+                toggleRobot();
+            } else if ( !enabled && message === 'enable') {
+                toggleRobot();
+            }
+        }
 
         function count_votes_and_drive() {
             //console.log("couting votes", dict, voters)
@@ -115,7 +130,7 @@
             return { 'ff': 0, 'f': 0, 'l': 0, 'r': 0, 'ww': 0, 'w': 0, 'a': 0, 'd': 0, 'h': 0, 'b': 0, 'z': 0, 's': 0 }
         }
 
-        function enableRobot() {
+        function toggleRobot() {
             enabled = !enabled;
             if (enabled == true) {
                 document.getElementById("robotStatus").childNodes[0].nodeValue = "disable Robot"
@@ -130,7 +145,7 @@
             fetch("http://" + robotIP + "/run/?speed=40")
         }
     </script>
-    <button onclick="enableRobot()" type="button" id="robotStatus">disable Robot</button>
+    <button onclick="toggleRobot()" type="button" id="robotStatus">disable Robot</button>
     </div>
 </body>
 

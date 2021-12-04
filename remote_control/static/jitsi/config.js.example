@@ -1,5 +1,6 @@
 window.config = {
     name: ' Cam 1',
+    adminUser: 'Admin',
     jitsiURL: 'foo.bar.com',
     roomName: 'bar',
     robotIP: '192.168.1.119'
