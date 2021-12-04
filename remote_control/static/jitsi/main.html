@@ -63,6 +63,7 @@
         });
 
         window.setInterval(function () { count_drive_votes_and_drive() }, 1500);
+        window.setInterval(function () { count_cam_votes_and_cam() }, 1500);
 
         function enableOrDisableRobot(message) {
             if (enabled && message === 'disable') {
@@ -126,7 +127,7 @@
             driveVoters = [];
         }
 
-        function count_cam_votes_and_drive() {
+        function count_cam_votes_and_cam() {
             let highest = 0;
             let selection = "";
             for (let [action, count] of Object.entries(camDict)) {
