@@ -45,12 +45,12 @@
                 }
             } else if (enabled == true) {
                 console.log('message bekommen', message, driveVoters);
-                if (['ff', 'f', 'r', 'l', 'ww', 'w', 'a', 'd', 'h', 'b', 'z', 's'].includes(message.message) && !driveVoters.includes(message.from)) {
+                if (['ff', 'f', 'r', 'l', 'ww', 'w', 'a', 'd', 'z', 's'].includes(message.message) && !driveVoters.includes(message.from)) {
                     // collect votes
                     driveDict[message.message] += 1;
                     driveVoters.push(message.from);
                     console.log("Vote", message.from, " voted for ", message.message, " Count ", driveDict);
-                } else if (['c', 'u', 'i', 'o', 'j', 'k', 'l'].includes(message.message) && !camVoters.includes(message.from)) {
+                } else if (['c', 'z', 'u', 'i', 'h', 'j', 'k'].includes(message.message) && !camVoters.includes(message.from)) {
                     // collect votes
                     camDict[message.message] += 1;
                     camVoters.push(message.from);
@@ -145,28 +145,30 @@
                 case 'c':
                     fetch("http://" + robotIP + "/run/?action=camready")
                     break;
-                case 'u':
+                case 'z':
+                    fetch("http://" + robotIP + "/run/?action=camready")
                     fetch("http://" + robotIP + "/run/?action=camleft")
+                    fetch("http://" + robotIP + "/run/?action=camup")
+                    break;
+                case 'u':
+                    fetch("http://" + robotIP + "/run/?action=camready")
                     fetch("http://" + robotIP + "/run/?action=camup")
                     break;
                 case 'i':
                     fetch("http://" + robotIP + "/run/?action=camready")
-                    fetch("http://" + robotIP + "/run/?action=camup")
-                    break;
-                case 'o':
                     fetch("http://" + robotIP + "/run/?action=camright")
                     fetch("http://" + robotIP + "/run/?action=camup")
                     break;
-                case 'j':
+                case 'h':
+                    fetch("http://" + robotIP + "/run/?action=camready")
                     fetch("http://" + robotIP + "/run/?action=camleft")
+                    break;
+                case 'j':
                     fetch("http://" + robotIP + "/run/?action=camready")
                     break;
                 case 'k':
                     fetch("http://" + robotIP + "/run/?action=camready")
-                    break;
-                case 'l':
                     fetch("http://" + robotIP + "/run/?action=camright")
-                    fetch("http://" + robotIP + "/run/?action=camready")
                     break;
                 default:
                     break;
@@ -177,11 +179,11 @@
         }
 
         function init_driveDict() {
-            return { 'ff': 0, 'f': 0, 'l': 0, 'r': 0, 'ww': 0, 'w': 0, 'a': 0, 'd': 0}
+            return { 'z': 0, 's': 0, 'ff': 0, 'f': 0, 'l': 0, 'r': 0, 'ww': 0, 'w': 0, 'a': 0, 'd': 0}
         }
 
         function init_camDict() {
-            return { 'z': 0, 's': 0, 'u': 0, 'i': 0, 'o': 0, 'j': 0, 'k': 0, 'l' :0 }
+            return { 'u': 0, 'i': 0, 'o': 0, 'j': 0, 'k': 0, 'l' :0 }
         }
 
         function toggleRobot() {
