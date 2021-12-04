@@ -5,3 +5,5 @@
 *.ai
 *.indd
 docs/build/*
+config.js
+_build

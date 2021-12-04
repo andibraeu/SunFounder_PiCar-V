@@ -17,7 +17,7 @@ from django.http import HttpResponse
 import picar
 
 picar.setup()
-db_file = "/home/pi/SunFounder_PiCar-V/remote_control/remote_control/driver/config"
+db_file = "/home/pi/sources/SunFounder_PiCar-V/remote_control/remote_control/driver/config"
 fw = front_wheels.Front_Wheels(debug=False, db=db_file)
 bw = back_wheels.Back_Wheels(debug=False, db=db_file)
 cam = camera.Camera(debug=False, db=db_file)
@@ -28,7 +28,7 @@ fw.ready()
 SPEED = 60
 bw_status = 0
 
-print(stream.start())
+#print(stream.start())
 
 def home(request):
 	return render_to_response("base.html")
