@@ -12,7 +12,7 @@
     <script src='/static/jitsi/config.js'></script>
     <script src='https://meet.weimarnetz.de/external_api.js'></script>
     <script>
-        const domain =window.config.jitsiURL;
+        const domain = window.config.jitsiURL;
         const robotIP = window.config.robotIP;
         const options = {
             roomName: window.config.roomName,
@@ -34,9 +34,9 @@
 
         api.getAvailableDevices().then(devices => { console.log(devices, "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA") });
         api.on('incomingMessage', (message) => {
-            if (enabled == true){
+            if (enabled == true) {
                 console.log('message bekommen', message, voters);
-                if (['ff', 'f', 'r', 'l', 'ww', 'w', 'a', 'd', 'h', 'b', 'z', 's'].includes(message.message) && ! voters.includes(message.from)){
+                if (['ff', 'f', 'r', 'l', 'ww', 'w', 'a', 'd', 'h', 'b', 'z', 's'].includes(message.message) && !voters.includes(message.from)) {
                     // collect votes
                     dict[message.message] += 1;
                     voters.push(message.from);
@@ -46,91 +46,91 @@
                 console.log("message ignored")
             }
         });
-        
-        window.setInterval(function(){ count_votes_and_drive() }, 1500);
-        
+
+        window.setInterval(function () { count_votes_and_drive() }, 1500);
+
         function count_votes_and_drive() {
             //console.log("couting votes", dict, voters)
-	    let highest = 0;
-	    let selection = "";
-	    for (let [action, count] of Object.entries(dict)) {
-	        if (count >= highest) {
-	            highest = count;
-	            selection = action;
-	        }
-	    };
+            let highest = 0;
+            let selection = "";
+            for (let [action, count] of Object.entries(dict)) {
+                if (count >= highest) {
+                    highest = count;
+                    selection = action;
+                }
+            };
 
-	    if (highest === 0)
-	        return;
-	    
-	    console.log("action machen: ", selection, highest)
-	    fetch("http://"+robotIP+"/run/?speed=40")
-	    let drive_time = 1400;
-	    switch(selection){
-	        case 'ww':
-	        case 'ff':
-	    	    fetch("http://"+robotIP+"/run/?speed=80")
-	            fetch("http://"+robotIP+"/run/?action=forward")
-	            setTimeout(stopMotor, 2 * drive_time)
-	            break;
-	        case 'w':
-	        case 'f':
-	            fetch("http://"+robotIP+"/run/?action=forward")
-	            setTimeout(stopMotor, drive_time)
-	            break;
-	        case 'a':
-	        case 'l':
-			fetch("http://"+robotIP+"/run/?action=fwleft")
-			fetch("http://"+robotIP+"/run/?action=forward")
-	            setTimeout(stopMotor, drive_time)
-	            break;
-	        case 'd':
-	        case 'r':
-	            fetch("http://"+robotIP+"/run/?action=fwright")
-	            fetch("http://"+robotIP+"/run/?action=forward")
-	            setTimeout(stopMotor, drive_time)
-	            break;
-	        case 'z':
-	        case 's':
-	            fetch("http://"+robotIP+"/run/?action=backward")
-	            setTimeout(stopMotor, drive_time)
-	            break;
-	        case 'h':
-	            fetch("http://"+robotIP+"/control?var=motor_both&val=0&val2=0")
-	            fetch("http://"+robotIP+"/control?var=lamp&val=0")
-	            break;
-	        case 'b':
-	            fetch("http://"+robotIP+"/control?var=lamp&val=50")
-	            setTimeout(function(){fetch("http://"+robotIP+"/control?var=lamp&val=0")}, 3000);
-	            break;
-	        default:
-	            break;
-	    };
-	    
-	    dict = init_dict();
-	    voters = [];
+            if (highest === 0)
+                return;
+
+            console.log("action machen: ", selection, highest)
+            fetch("http://" + robotIP + "/run/?speed=40")
+            let drive_time = 1400;
+            switch (selection) {
+                case 'ww':
+                case 'ff':
+                    fetch("http://" + robotIP + "/run/?speed=80")
+                    fetch("http://" + robotIP + "/run/?action=forward")
+                    setTimeout(stopMotor, 2 * drive_time)
+                    break;
+                case 'w':
+                case 'f':
+                    fetch("http://" + robotIP + "/run/?action=forward")
+                    setTimeout(stopMotor, drive_time)
+                    break;
+                case 'a':
+                case 'l':
+                    fetch("http://" + robotIP + "/run/?action=fwleft")
+                    fetch("http://" + robotIP + "/run/?action=forward")
+                    setTimeout(stopMotor, drive_time)
+                    break;
+                case 'd':
+                case 'r':
+                    fetch("http://" + robotIP + "/run/?action=fwright")
+                    fetch("http://" + robotIP + "/run/?action=forward")
+                    setTimeout(stopMotor, drive_time)
+                    break;
+                case 'z':
+                case 's':
+                    fetch("http://" + robotIP + "/run/?action=backward")
+                    setTimeout(stopMotor, drive_time)
+                    break;
+                case 'h':
+                    fetch("http://" + robotIP + "/control?var=motor_both&val=0&val2=0")
+                    fetch("http://" + robotIP + "/control?var=lamp&val=0")
+                    break;
+                case 'b':
+                    fetch("http://" + robotIP + "/control?var=lamp&val=50")
+                    setTimeout(function () { fetch("http://" + robotIP + "/control?var=lamp&val=0") }, 3000);
+                    break;
+                default:
+                    break;
+            };
+
+            dict = init_dict();
+            voters = [];
         }
-        
+
         function init_dict() {
-            return {'ff': 0, 'f': 0, 'l': 0, 'r': 0, 'ww': 0, 'w': 0, 'a': 0, 'd': 0, 'h': 0, 'b': 0, 'z': 0, 's': 0}
+            return { 'ff': 0, 'f': 0, 'l': 0, 'r': 0, 'ww': 0, 'w': 0, 'a': 0, 'd': 0, 'h': 0, 'b': 0, 'z': 0, 's': 0 }
         }
-        
+
         function enableRobot() {
-            enabled = ! enabled;
+            enabled = !enabled;
             if (enabled == true) {
-                document.getElementById("robotStatus").childNodes[0].nodeValue="disable Robot"
+                document.getElementById("robotStatus").childNodes[0].nodeValue = "disable Robot"
             } else {
-                document.getElementById("robotStatus").childNodes[0].nodeValue="enable Robot"
+                document.getElementById("robotStatus").childNodes[0].nodeValue = "enable Robot"
             }
             console.log(enabled, "changed robot control")
         }
-        function stopMotor(){
-			fetch("http://"+robotIP+"/run/?action=stop")
-            		fetch("http://"+robotIP+"/run/?action=fwstraight")
-			fetch("http://"+robotIP+"/run/?speed=40")
+        function stopMotor() {
+            fetch("http://" + robotIP + "/run/?action=stop")
+            fetch("http://" + robotIP + "/run/?action=fwstraight")
+            fetch("http://" + robotIP + "/run/?speed=40")
         }
     </script>
-    <button onclick="enableRobot()" type="button" id="robotStatus">disable Robot</button> 
+    <button onclick="enableRobot()" type="button" id="robotStatus">disable Robot</button>
     </div>
 </body>
 
