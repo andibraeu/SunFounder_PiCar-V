@@ -90,13 +90,6 @@ function count_drive_votes_and_drive() {
         case 'w':
         case 'f':
             fetch("http://" + robotIP + "/run/?action=forward")
-            .then(function(data) {
-                fetch("http://" + robotIP + "/run/?action=fwleft")
-                console.log('successfully fetched: ' + data);
-            })
-            .catch(function(error) {
-                console.log('somehow catched: ' + error);
-            });
             setTimeout(stopMotor, drive_time)
             break;
         case 'a':
@@ -194,6 +187,13 @@ function toggleRobot() {
 }
 function stopMotor() {
     fetch("http://" + robotIP + "/run/?action=stop")
-    fetch("http://" + robotIP + "/run/?action=fwstraight")
+    .then(function(data) {
+        let straight = fetch("http://" + robotIP + "/run/?action=fwstraight")
+        console.log('successfully fetched stop: ' + data.text);
+        return straight;
+    })
+    .catch(function(error) {
+        console.log('somehow catched: ' + error);
+    });
     fetch("http://" + robotIP + "/run/?speed=40")
 }
