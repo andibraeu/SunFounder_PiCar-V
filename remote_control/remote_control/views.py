@@ -11,7 +11,7 @@
 '''
 
 from django.shortcuts import render_to_response
-from .driver import camera, stream
+from .driver import camera, stream, status
 from picar import back_wheels, front_wheels
 from django.http import HttpResponse
 import picar
@@ -145,6 +145,15 @@ def cali(request):
 		else:
 			print('command error, error command "%s" received' % action)
 	return render_to_response("cali.html")
+
+def status(request):
+	if 'action' in request.GET:
+		action = request.GET['action']
+		if action == 'health':
+			print('"%s" command received' % action)
+			status.health()
+
+
 
 def connection_test(request):
 	return HttpResponse('OK')

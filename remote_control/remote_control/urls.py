@@ -22,5 +22,6 @@ urlpatterns = [
     url(r'^$', views.home),
     url(r'^run/$', views.run),
     url(r'^cali/$', views.cali),
+    url(r'^status/$', views.status),
     url(r'^connection_test/$', views.connection_test),
 ]

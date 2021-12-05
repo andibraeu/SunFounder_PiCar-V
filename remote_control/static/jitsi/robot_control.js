@@ -26,7 +26,8 @@ api.on('incomingMessage', (message) => {
         console.log('wichtige nachricht bekommen');
         if (['enable', 'disable'].includes(message.message)) {
             enableOrDisableRobot(message.message);
-        } else if (['shutdown', 'reset', 'restart_cam'].includes(message.message)) {
+        } else if (['shutdown', 'reset', 'restart_cam', 'health'].includes(message.message)) {
+            fetch("http://" + robotIP + "/status/?action=health");
             console.log('would do ', message.message, ' from ', message.nick)
         }
     } else if (enabled == true) {
@@ -185,17 +186,21 @@ function toggleRobot() {
     }
     console.log(enabled, "changed robot control")
 }
+
 function stopMotor() {
     fetch("http://" + robotIP + "/run/?action=stop")
-    .then(function(data) {
+    .then(function() {
         let straight = fetch("http://" + robotIP + "/run/?action=fwstraight")
-        console.log('successfully fetched stop: ' + data.text);
+        console.log('successfully fetched stop');
         return straight;
     })
-    .then(function(data) {
+    .then(function() {
         let speed =     fetch("http://" + robotIP + "/run/?speed=40")
-        console.log('successfully fetched straight: ' + data.text);
+        console.log('successfully fetched straight');
         return speed;
+    })
+    .then(function() {
+        console.log('robby should have stopped');
     })
     .catch(function(error) {
         console.log('somehow catched: ' + error);
