@@ -27,7 +27,9 @@ api.on('incomingMessage', (message) => {
         if (['enable', 'disable'].includes(message.message)) {
             enableOrDisableRobot(message.message);
         } else if (['shutdown', 'reset', 'restart_cam', 'health'].includes(message.message)) {
-            fetch("http://" + robotIP + "/status/?action=health");
+            fetch("http://" + robotIP + "/status/?action=health").then(function(data) {
+                console.log(data);
+            });
             console.log('would do ', message.message, ' from ', message.nick)
         }
     } else if (enabled == true) {
