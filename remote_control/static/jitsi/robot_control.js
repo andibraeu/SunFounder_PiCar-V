@@ -90,6 +90,12 @@ function count_drive_votes_and_drive() {
         case 'w':
         case 'f':
             fetch("http://" + robotIP + "/run/?action=forward")
+            .then(function(data) {
+                console.log('successfully fetched: ' + data);
+            })
+            .catch(function(error) {
+                console.log('somehow catched: ' + error);
+            });
             setTimeout(stopMotor, drive_time)
             break;
         case 'a':
