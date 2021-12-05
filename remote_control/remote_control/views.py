@@ -152,7 +152,7 @@ def status(request):
 		action = request.GET['action']
 		if action == 'health':
 			print('"%s" command received' % action)
-			statusModule.health()
+			return statusModule.health()
 
 
 
