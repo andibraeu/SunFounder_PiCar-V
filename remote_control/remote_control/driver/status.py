@@ -20,4 +20,4 @@ class Status(object):
 
     def health(self):
         self.status['cpuTemp'] = CPUTemperature().temperature
-        return json.dumps(self.status)
+        return self.status
