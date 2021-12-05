@@ -13,7 +13,7 @@
 from django.shortcuts import render_to_response
 from .driver import camera, stream, status
 from picar import back_wheels, front_wheels
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 import picar
 
 picar.setup()
@@ -152,7 +152,7 @@ def status(request):
 		action = request.GET['action']
 		if action == 'health':
 			print('"%s" command received' % action)
-			return statusModule.health()
+			return JsonResponse(statusModule.health())
 
 
 
