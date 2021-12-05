@@ -24,6 +24,7 @@ cam = camera.Camera(debug=False, db=db_file)
 cam.ready()
 bw.ready()
 fw.ready()
+statusModule = status.Status()
  
 SPEED = 60
 bw_status = 0
@@ -151,7 +152,7 @@ def status(request):
 		action = request.GET['action']
 		if action == 'health':
 			print('"%s" command received' % action)
-			status.health()
+			statusModule.health()
 
 
 
