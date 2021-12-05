@@ -50,12 +50,13 @@ api.on('incomingMessage', (message) => {
 
 window.setInterval(function () { count_drive_votes_and_drive() }, 1500);
 window.setInterval(function () { count_cam_votes_and_cam() }, 1500);
-window.setInterval(() => {
+window.setInterval(function () {
+    console.log('send message');
     api.executeCommand('sendChatMessage', {
     message: 'Hallo, ich bin Robby-Car. Wie ihr mich bedienen könnt findet ihr auf https://world.naturkunde.museum/tafeln/robby',
     ignorePrivacy: false // true if the privacy notification should be ignored. Defaulted to false.
     });
-}, 30000) 
+}, 30000);
 
 function enableOrDisableRobot(message) {
     if (enabled && message === 'disable') {
