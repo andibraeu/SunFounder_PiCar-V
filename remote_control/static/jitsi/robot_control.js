@@ -91,6 +91,7 @@ function count_drive_votes_and_drive() {
         case 'f':
             fetch("http://" + robotIP + "/run/?action=forward")
             .then(function(data) {
+                fetch("http://" + robotIP + "/run/?action=fwleft")
                 console.log('successfully fetched: ' + data);
             })
             .catch(function(error) {
