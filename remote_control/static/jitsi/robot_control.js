@@ -192,8 +192,12 @@ function stopMotor() {
         console.log('successfully fetched stop: ' + data.text);
         return straight;
     })
+    .then(function(data) {
+        let speed =     fetch("http://" + robotIP + "/run/?speed=40")
+        console.log('successfully fetched straight: ' + data.text);
+        return speed;
+    })
     .catch(function(error) {
         console.log('somehow catched: ' + error);
     });
-    fetch("http://" + robotIP + "/run/?speed=40")
 }
