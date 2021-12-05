@@ -52,8 +52,8 @@ window.setInterval(function () { count_drive_votes_and_drive() }, 1500);
 window.setInterval(function () { count_cam_votes_and_cam() }, 1500);
 window.setInterval(function () {
     console.log('send message');
-    api.executeCommand('sendChatMessage', 'Hallo, ich bin Robby-Car. Wie ihr mich bedienen könnt findet ihr auf https://world.naturkunde.museum/tafeln/robby');
-}, 30000);
+    api.executeCommand('sendChatMessage', 'Hallo, ich bin Robby Car. Wie ihr mich bedienen könnt findet ihr auf https://world.naturkunde.museum/tafeln/robby');
+}, 120000);
 
 function enableOrDisableRobot(message) {
     if (enabled && message === 'disable') {
