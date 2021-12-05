@@ -19,5 +19,5 @@ class Status(object):
         print('initiated status module')
 
     def health(self):
-        self.status['cpuTemp'] = CPUTemperature()
+        self.status['cpuTemp'] = CPUTemperature().temperature
         return json.dumps(self.status)
