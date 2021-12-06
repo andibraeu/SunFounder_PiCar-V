@@ -11,7 +11,7 @@
 '''
 
 from django.shortcuts import render_to_response
-from .driver import browser, camera, stream, status
+from .driver import camera, stream, status
 from picar import back_wheels, front_wheels
 from django.http import HttpResponse, JsonResponse
 import picar
@@ -24,7 +24,6 @@ cam = camera.Camera(debug=False, db=db_file)
 cam.ready()
 bw.ready()
 fw.ready()
-chromium = browser.Browser()
 statusModule = status.Status()
  
 SPEED = 60
