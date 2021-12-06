@@ -9,7 +9,7 @@
 '''
 from pyppeteer import launch
 
-class Status(object):
+class Browser(object):
 
     async def __init__(self):
         self.browser = await launch(headless=True, chromeArgs=['--use-fake-ui-for-media-stream', '--alsa-output-device=plug:null', '--display=:1', '--no-sandbox', '--disable-extensions'], executablePath='/usr/bin/chromium-browser', handleSIGINT=False)
