@@ -9,7 +9,6 @@
 '''
 
 from gpiozero import CPUTemperature
-import json
 
 class Status(object):
 
