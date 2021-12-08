@@ -61,9 +61,9 @@ function handleAdminMessages(message) {
             let answer = '';
             if (data.cpuTemp > 78) {
                 answer = 'Puuh, mir ist ganz schön heiß (' + data.cpuTemp + ' °C). Ich brauch dann mal ne Pause!';
-            } else (
+            } else {
                 answer = 'Danke der Nachfrage, in mir herrschen' + data.cpuTemp + ' °C. Bis 80°C musst du dir keine Sorgen machen!';
-            )
+            }
             api.executeCommand('sendChatMessage', answer, message.from);
         });
         console.log('would do ', message.message, ' from ', message.nick);
