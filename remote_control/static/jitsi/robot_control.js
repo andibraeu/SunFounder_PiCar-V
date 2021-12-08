@@ -48,13 +48,41 @@ window.setInterval(function () { count_cam_votes_and_cam() }, 1500);
 window.setInterval(function () {
     console.log('send message');
     api.executeCommand('sendChatMessage', 'Hallo, ich bin Robby Car. Wie ihr mich bedienen könnt findet ihr auf https://world.naturkunde.museum/tafeln/robby');
-}, 120000);
+}, 300000);
+
+api.addListener('participantLeft', function () {
+    if (api.getNumberOfParticipants() == 1) {
+        api.isVideoMuted().then(muted => {
+            if (!muted) {
+                api.executeCommand('toggleVideo');
+            }
+        });
+    }
+});
+
+api.addListener('participantJoined', function () {
+    if (api.getNumberOfParticipants() > 1) {
+        api.isVideoMuted().then(muted => {
+            if (muted) {
+                api.executeCommand('toggleVideo');
+            }
+        });
+    }
+});
+
+api.addListener('videoMuteStatusChanged', function (muted) {
+    if (api.getNumberOfParticipants() > 1) {
+        if (muted) {
+            api.executeCommand('toggleVideo');
+        }
+    }
+});
 
 function handleAdminMessages(message) {
     console.log('wichtige nachricht bekommen');
     if (['enable', 'disable'].includes(message.message)) {
-        enableOrDisableRobot(message.message);
-    } else if (['shutdown', 'reset', 'restart_cam', 'health'].includes(message.message)) {
+        enableOrDisableRobot(message);
+    } else if (['health'].includes(message.message)) {
         fetch("http://" + robotIP + "/status/?action=health")
         .then(response => response.json())
         .then(function (data) {
@@ -72,14 +100,28 @@ function handleAdminMessages(message) {
             api.executeCommand('sendChatMessage', answer, message.from);
         });
         console.log('would do ', message.message, ' from ', message.nick);
+    } else if (['shutdown', 'reset', 'restart_cam'].includes(message.message)) {
+        api.isVideoMuted().then(muted => {
+            if (!muted) {
+                api.executeCommand({'toggleVideo': [], 'toggleVideo': []});
+                api.executeCommand('sendChatMessage', "Die Kamera wurde neugestartet", message.from);
+            } else {
+                api.executeCommand('toggleVideo');
+                api.executeCommand('sendChatMessage', "Die Kamera wurde gestartet", message.from);
+
+            }
+        });
     }
+    
 }
 
 function enableOrDisableRobot(message) {
-    if (enabled && message === 'disable') {
+    if (enabled && message.message === 'disable') {
         toggleRobot();
-    } else if ( !enabled && message === 'enable') {
+        api.executeCommand('sendChatMessage', 'Die Chatsteuerung wurde deaktiviert', message.from);
+    } else if ( !enabled && message.message === 'enable') {
         toggleRobot();
+        api.executeCommand('sendChatMessage', 'Die Chatsteuerung wurde aktiviert', message.from);
     }
 }
 
