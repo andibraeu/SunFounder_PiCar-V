@@ -51,8 +51,10 @@ window.setInterval(function () {
 }, 300000);
 
 api.addListener('participantLeft', function () {
+    console.log('da ging jemand');
     if (api.getNumberOfParticipants() == 1) {
         api.isVideoMuted().then(muted => {
+            console.log('muted: ' + muted);
             if (!muted) {
                 api.executeCommand('toggleVideo');
             }
@@ -61,8 +63,10 @@ api.addListener('participantLeft', function () {
 });
 
 api.addListener('participantJoined', function () {
+    console.log('da kam jemand');
     if (api.getNumberOfParticipants() > 1) {
         api.isVideoMuted().then(muted => {
+            console.log('muted: ' + muted);
             if (muted) {
                 api.executeCommand('toggleVideo');
             }
@@ -71,6 +75,7 @@ api.addListener('participantJoined', function () {
 });
 
 api.addListener('videoMuteStatusChanged', function (muted) {
+    console.log('muted: ' + muted);
     if (api.getNumberOfParticipants() > 1) {
         if (muted) {
             api.executeCommand('toggleVideo');
