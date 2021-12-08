@@ -149,29 +149,38 @@ function count_cam_votes_and_cam() {
             fetch("http://" + robotIP + "/run/?action=camready")
             break;
         case 'z':
-            fetch("http://" + robotIP + "/run/?action=camready")
-            fetch("http://" + robotIP + "/run/?action=camleft")
-            fetch("http://" + robotIP + "/run/?action=camup")
+            fetch("http://" + robotIP + "/run/?action=camready").then(function () {
+                let left = fetch("http://" + robotIP + "/run/?action=camleft")
+                return left
+            }).then(function () {
+                fetch("http://" + robotIP + "/run/?action=camup")    
+            })
             break;
         case 'u':
-            fetch("http://" + robotIP + "/run/?action=camready")
-            fetch("http://" + robotIP + "/run/?action=camup")
+            fetch("http://" + robotIP + "/run/?action=camready").then(function () {
+                fetch("http://" + robotIP + "/run/?action=camup")  
+            })
             break;
         case 'i':
-            fetch("http://" + robotIP + "/run/?action=camready")
-            fetch("http://" + robotIP + "/run/?action=camright")
-            fetch("http://" + robotIP + "/run/?action=camup")
+            fetch("http://" + robotIP + "/run/?action=camready").then(function () {
+                let right = fetch("http://" + robotIP + "/run/?action=camright")
+                return right
+            }).then(function () {
+                fetch("http://" + robotIP + "/run/?action=camup")
+            })
             break;
         case 'h':
-            fetch("http://" + robotIP + "/run/?action=camready")
-            fetch("http://" + robotIP + "/run/?action=camleft")
+            fetch("http://" + robotIP + "/run/?action=camready").then(function () {
+                fetch("http://" + robotIP + "/run/?action=camleft")
+            })
             break;
         case 'j':
             fetch("http://" + robotIP + "/run/?action=camready")
             break;
         case 'k':
-            fetch("http://" + robotIP + "/run/?action=camready")
-            fetch("http://" + robotIP + "/run/?action=camright")
+            fetch("http://" + robotIP + "/run/?action=camready").then(function () {
+                fetch("http://" + robotIP + "/run/?action=camright")
+            })
             break;
         default:
             break;
