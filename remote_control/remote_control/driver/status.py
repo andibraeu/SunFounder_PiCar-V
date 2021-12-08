@@ -8,7 +8,7 @@
 **********************************************************************
 '''
 
-from gpiozero import CPUTemperature
+from gpiozero import CPUTemperature, LoadAverage
 
 class Status(object):
 
@@ -19,4 +19,5 @@ class Status(object):
 
     def health(self):
         self.status['cpuTemp'] = CPUTemperature().temperature
+        self.status['load'] = LoadAverage(max_load_average=2).load_average
         return self.status
