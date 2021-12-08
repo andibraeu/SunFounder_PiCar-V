@@ -23,15 +23,7 @@ let camVoters = [];
 api.getAvailableDevices().then(devices => { console.log(devices, "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA") });
 api.on('incomingMessage', (message) => {
     if (message.privateMessage && window.config.adminUsers.includes(message.nick)) {
-        console.log('wichtige nachricht bekommen');
-        if (['enable', 'disable'].includes(message.message)) {
-            enableOrDisableRobot(message.message);
-        } else if (['shutdown', 'reset', 'restart_cam', 'health'].includes(message.message)) {
-            fetch("http://" + robotIP + "/status/?action=health").then(function(data) {
-                console.log(data.response);
-            });
-            console.log('would do ', message.message, ' from ', message.nick)
-        }
+        handleAdminMessages(message);
     } else if (enabled == true) {
         console.log('message bekommen', message, driveVoters);
         if (['ff', 'f', 'r', 'l', 'ww', 'w', 'a', 'd', 'b', 's'].includes(message.message) && !driveVoters.includes(message.from)) {
@@ -57,6 +49,20 @@ window.setInterval(function () {
     console.log('send message');
     api.executeCommand('sendChatMessage', 'Hallo, ich bin Robby Car. Wie ihr mich bedienen könnt findet ihr auf https://world.naturkunde.museum/tafeln/robby');
 }, 120000);
+
+function handleAdminMessages(message) {
+    console.log('wichtige nachricht bekommen');
+    if (['enable', 'disable'].includes(message.message)) {
+        enableOrDisableRobot(message.message);
+    } else if (['shutdown', 'reset', 'restart_cam', 'health'].includes(message.message)) {
+        fetch("http://" + robotIP + "/status/?action=health")
+        .then(response => response.json())
+        .then(function (data) {
+            console.log(data);
+        });
+        console.log('would do ', message.message, ' from ', message.nick);
+    }
+}
 
 function enableOrDisableRobot(message) {
     if (enabled && message === 'disable') {
