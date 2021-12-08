@@ -86,36 +86,46 @@ function count_drive_votes_and_drive() {
     switch (selection) {
         case 'ww':
         case 'ff':
-            fetch("http://" + robotIP + "/run/?speed=80")
-            fetch("http://" + robotIP + "/run/?action=forward")
-            setTimeout(stopMotor, 2 * drive_time)
+            fetch("http://" + robotIP + "/run/?speed=80").then(function() {
+                let forward = fetch("http://" + robotIP + "/run/?action=forward")
+                return forward
+            }).then(function() {
+                setTimeout(stopMotor, 2 * drive_time)
+            })
             break;
         case 'w':
         case 'f':
-            fetch("http://" + robotIP + "/run/?action=forward")
-            setTimeout(stopMotor, drive_time)
+            fetch("http://" + robotIP + "/run/?action=forward").then(function() {
+                setTimeout(stopMotor, drive_time)
+            })
             break;
         case 'a':
         case 'l':
-            fetch("http://" + robotIP + "/run/?action=fwleft")
-            fetch("http://" + robotIP + "/run/?action=forward")
-            setTimeout(stopMotor, drive_time)
+            fetch("http://" + robotIP + "/run/?action=fwleft").then(function() {
+                let forward = fetch("http://" + robotIP + "/run/?action=forward")
+                return forward
+            }).then(function () {
+                setTimeout(stopMotor, drive_time)    
+            })
             break;
         case 'd':
         case 'r':
-            fetch("http://" + robotIP + "/run/?action=fwright")
-            fetch("http://" + robotIP + "/run/?action=forward")
-            setTimeout(stopMotor, drive_time)
+            fetch("http://" + robotIP + "/run/?action=fwright").then(function () {
+                let forward = fetch("http://" + robotIP + "/run/?action=forward")    
+                return forward
+            }).then(function () {
+                setTimeout(stopMotor, drive_time)
+            })
             break;
         case 'b':
         case 's':
-            fetch("http://" + robotIP + "/run/?action=backward")
-            setTimeout(stopMotor, drive_time)
+            fetch("http://" + robotIP + "/run/?action=backward").then(function () {
+                setTimeout(stopMotor, drive_time)  
+            })
             break;
         default:
             break;
     };
-
     driveDict = init_driveDict();
     driveVoters = [];
 }
@@ -197,7 +207,7 @@ function stopMotor() {
         return straight;
     })
     .then(function() {
-        let speed =     fetch("http://" + robotIP + "/run/?speed=40")
+        let speed = fetch("http://" + robotIP + "/run/?speed=40")
         console.log('successfully fetched straight');
         return speed;
     })
