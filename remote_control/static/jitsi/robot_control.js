@@ -64,6 +64,11 @@ function handleAdminMessages(message) {
             } else {
                 answer = 'Danke der Nachfrage, in mir herrschen ' + data.cpuTemp + ' °C. Bis 80°C musst du dir keine Sorgen machen!';
             }
+            if (data.load > 2) {
+                answer += '\n\n Ich habe auch ordentlich zu tun.';
+            } else {
+                answer += '\n\n Man könnte fast sagen, ich langweile mich.';
+            }
             api.executeCommand('sendChatMessage', answer, message.from);
         });
         console.log('would do ', message.message, ' from ', message.nick);
