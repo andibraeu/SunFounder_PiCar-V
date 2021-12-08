@@ -58,7 +58,7 @@ function handleAdminMessages(message) {
         fetch("http://" + robotIP + "/status/?action=health")
         .then(response => response.json())
         .then(function (data) {
-            console.log(data);
+            api.executeCommand('sendChatMessage', data, message.nick);
         });
         console.log('would do ', message.message, ' from ', message.nick);
     }
