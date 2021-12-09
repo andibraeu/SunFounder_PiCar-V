@@ -45,7 +45,7 @@ window.setInterval(function () { count_drive_votes_and_drive() }, 1500);
 window.setInterval(function () { count_cam_votes_and_cam() }, 1500);
 window.setInterval(function () {
     console.log('send message');
-    api.executeCommand('sendChatMessage', 'Hallo, ich bin Robby Car. Wie ihr mich bedienen könnt findet ihr auf https://world.naturkunde.museum/tafeln/robby');
+    api.executeCommand('sendChatMessage', 'Hallo, ich bin Robby Car. Wie ihr mich bedienen könnt findet ihr auf https://world.naturkunde.museum/tafeln/robby\n\nBitte schaltet eure Kameras aus, damit ich mich besser auf das Museum konzentrieren kann.');
 }, 300000);
 window.setInterval(function () {
     api.isVideoMuted().then(muted => {
@@ -97,9 +97,9 @@ function handleAdminMessages(message) {
                 answer = 'Danke der Nachfrage, in mir herrschen ' + data.cpuTemp + ' °C. Bis 80°C musst du dir keine Sorgen machen!';
             }
             if (data.load > 2) {
-                answer += '\n\n Ich habe auch ordentlich zu tun.';
+                answer += '\n\nIch habe auch ordentlich zu tun.';
             } else {
-                answer += '\n\n Man könnte fast sagen, ich langweile mich.';
+                answer += '\n\nMan könnte fast sagen, ich langweile mich.';
             }
             api.executeCommand('sendChatMessage', answer, message.from);
         });
