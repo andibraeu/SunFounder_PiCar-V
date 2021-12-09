@@ -16,6 +16,7 @@ const api = new JitsiMeetExternalAPI(domain, options);
 // const devices = await api.getCurrentDevices();
 let enabled = true;
 let driveDict = init_driveDict();
+let cameraShouldBeEnabled = true;
 let camDict = init_camDict();
 let driveVoters = [];
 let camVoters = [];
@@ -49,6 +50,9 @@ window.setInterval(function () {
     console.log('send message');
     api.executeCommand('sendChatMessage', 'Hallo, ich bin Robby Car. Wie ihr mich bedienen könnt findet ihr auf https://world.naturkunde.museum/tafeln/robby');
 }, 300000);
+window.setInterval(function () {
+    
+}, 60000);
 
 api.addListener('participantLeft', function () {
     console.log('da ging jemand');
@@ -98,9 +102,10 @@ function handleAdminMessages(message) {
         });
         console.log('would do ', message.message, ' from ', message.nick);
     } else if (['shutdown', 'reset', 'restart_cam'].includes(message.message)) {
+        cameraShouldBeEnabled = true;
         api.isVideoMuted().then(muted => {
             if (!muted) {
-                api.executeCommand({'toggleVideo': [], 'toggleVideo': []});
+                api.executeCommands({'toggleVideo': [], 'toggleVideo': []});
                 api.executeCommand('sendChatMessage', "Die Kamera wurde neugestartet", message.from);
             } else {
                 api.executeCommand('toggleVideo');
