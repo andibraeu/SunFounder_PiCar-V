@@ -118,12 +118,12 @@ function handleAdminMessages(message) {
     } else if (['reboot', 'reset'].includes(message.message)) {
         fetch("http://" + robotIP + "/status/?action=reboot")
         .then(function () {
-            api.executeCommand('sendChatMessage', 'Ich bin durcheinander und starte deswegen mal neu! Bis gleich!')
+            api.executeCommand('sendChatMessage', 'Ich bin durcheinander und starte deswegen mal neu! Bis gleich!', ignorePrivacy=true)
         })
     } else if (['shutdown'].includes(message.message)) {
         fetch("http://" + robotIP + "/status/?action=shutdown")
         .then(function () {
-            api.executeCommand('sendChatMessage', 'Schluss für heute! Ich lege mich jetzt schlafen!')
+            api.executeCommand('sendChatMessage', 'Schluss für heute! Ich lege mich jetzt schlafen!', ignorePrivacy=true)
         })
     }
 }
