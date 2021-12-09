@@ -74,14 +74,6 @@ api.addListener('participantJoined', function () {
     }
 });
 
-api.addListener('videoMuteStatusChanged', function (muted) {
-    console.log('muted: ' + muted);
-    if (api.getNumberOfParticipants() > 1) {
-        if (muted) {
-            api.executeCommand('toggleVideo');
-        }
-    }
-});
 
 function handleAdminMessages(message) {
     console.log('wichtige nachricht bekommen');
