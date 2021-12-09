@@ -153,7 +153,14 @@ def status(request):
 		if action == 'health':
 			print('"%s" command received' % action)
 			return JsonResponse(statusModule.health())
-
+		elif action == 'shutdown':
+			print('"%s" command received' % action)
+			statusModule.shutdown()
+			return "Shutdown in 1 minute!"
+		elif action == 'reboot':
+			print('"%s" command received' % action)
+			statusModule.reboot()
+			return "Reboot in 1 minute!"
 
 
 def connection_test(request):

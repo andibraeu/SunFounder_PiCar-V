@@ -9,6 +9,7 @@
 '''
 
 from gpiozero import CPUTemperature, LoadAverage
+import os
 
 class Status(object):
 
@@ -21,3 +22,9 @@ class Status(object):
         self.status['cpuTemp'] = CPUTemperature().temperature
         self.status['load'] = LoadAverage(max_load_average=2).load_average
         return self.status
+
+    def shutdown(self):
+        os.system('sudo shutdown -h +1')
+
+    def reboot(self):
+        os.system('sudo shutdown -r +1')

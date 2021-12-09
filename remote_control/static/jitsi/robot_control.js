@@ -101,7 +101,7 @@ function handleAdminMessages(message) {
             api.executeCommand('sendChatMessage', answer, message.from);
         });
         console.log('would do ', message.message, ' from ', message.nick);
-    } else if (['shutdown', 'reset', 'restart_cam'].includes(message.message)) {
+    } else if (['restart_cam'].includes(message.message)) {
         cameraShouldBeEnabled = true;
         api.isVideoMuted().then(muted => {
             if (!muted) {
@@ -110,9 +110,18 @@ function handleAdminMessages(message) {
             } else {
                 api.executeCommand('toggleVideo');
                 api.executeCommand('sendChatMessage', "Die Kamera wurde gestartet", message.from);
-
             }
         });
+    } else if (['reboot', 'reset'].includes(message.message)) {
+        fetch("http://" + robotIP + "/status/?action=reboot")
+        .then(function () {
+            api.executeCommand('sendChatMessage', 'Ich bin durcheinander und starte deswegen mal neu! Bis gleich!')
+        })
+    } else if (['shutdown'].includes(message.message)) {
+        fetch("http://" + robotIP + "/status/?action=shutdown")
+        .then(function () {
+            api.executeCommand('sendChatMessage', 'Schluss für heute! Ich lege mich jetzt schlafen!')
+        })
     }
     
 }
