@@ -6,14 +6,12 @@ const options = {
     height: 600,
     parentNode: document.querySelector('#jitsi-meet'),
     configOverwrite: { channelLastN: 1, disableSimulcast: true, disableAudioLevels: true, startWithAudioMuted: true, startWithVideoMuted: false, enableNoAudioDetection: false, enableWelcomePage: false, prejoinPageEnabled: false },
-    // interfaceConfigOverwrite: {TOOLBAR_BUTTONS: [], DISABLE_JOIN_LEAVE_NOTIFICATIONS: true, HIDE_INVITE_MORE_HEADER: true, FILM_STRIP_MAX_HEIGHT: 0, VIDEO_QUALITY_LABEL_DISABLED: true, RECENT_LIST_ENABLED: false}, 
     interfaceConfigOverwrite: { DISABLE_JOIN_LEAVE_NOTIFICATIONS: true, HIDE_INVITE_MORE_HEADER: true, FILM_STRIP_MAX_HEIGHT: 0, VIDEO_QUALITY_LABEL_DISABLED: true, RECENT_LIST_ENABLED: false },
     userInfo: {
         displayName: window.config.name
     }
 };
 const api = new JitsiMeetExternalAPI(domain, options);
-// const devices = await api.getCurrentDevices();
 let enabled = true;
 let driveDict = init_driveDict();
 let cameraShouldBeEnabled = true;
@@ -38,7 +36,6 @@ api.on('incomingMessage', (message) => {
             camVoters.push(message.from);
             console.log("Vote", message.from, " voted for ", message.message, " Count ", camDict);
         }
-
     } else {
         console.log("message ignored")
     }
@@ -51,7 +48,11 @@ window.setInterval(function () {
     api.executeCommand('sendChatMessage', 'Hallo, ich bin Robby Car. Wie ihr mich bedienen könnt findet ihr auf https://world.naturkunde.museum/tafeln/robby');
 }, 300000);
 window.setInterval(function () {
-    
+    api.isVideoMuted().then(muted => {
+        if (muted && cameraShouldBeEnabled) {
+            api.executeCommand('toggleVideo');
+        }
+    });
 }, 60000);
 
 api.addListener('participantLeft', function () {
@@ -61,6 +62,7 @@ api.addListener('participantLeft', function () {
             console.log('muted: ' + muted);
             if (!muted) {
                 api.executeCommand('toggleVideo');
+                cameraShouldBeEnabled = false
             }
         });
     }
@@ -73,6 +75,7 @@ api.addListener('participantJoined', function () {
             console.log('muted: ' + muted);
             if (muted) {
                 api.executeCommand('toggleVideo');
+                cameraShouldBeEnabled = true
             }
         });
     }
@@ -102,12 +105,12 @@ function handleAdminMessages(message) {
         });
         console.log('would do ', message.message, ' from ', message.nick);
     } else if (['restart_cam'].includes(message.message)) {
-        cameraShouldBeEnabled = true;
         api.isVideoMuted().then(muted => {
             if (!muted) {
-                api.executeCommands({'toggleVideo': [], 'toggleVideo': []});
+                api.executeCommand('toggleVideo');
                 api.executeCommand('sendChatMessage', "Die Kamera wurde neugestartet", message.from);
-            } else {
+                api.executeCommand('toggleVideo');
+            } else if ( cameraShouldBeEnabled ) {
                 api.executeCommand('toggleVideo');
                 api.executeCommand('sendChatMessage', "Die Kamera wurde gestartet", message.from);
             }
@@ -123,7 +126,6 @@ function handleAdminMessages(message) {
             api.executeCommand('sendChatMessage', 'Schluss für heute! Ich lege mich jetzt schlafen!')
         })
     }
-    
 }
 
 function enableOrDisableRobot(message) {
