@@ -21,20 +21,21 @@ let camVoters = [];
 
 api.getAvailableDevices().then(devices => { console.log(devices, "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA") });
 api.on('incomingMessage', (message) => {
+    let normalizedMessage = message.message.toLowerCase();
     if (message.privateMessage && window.config.adminUsers.includes(message.nick)) {
         handleAdminMessages(message);
     } else if (enabled == true) {
         console.log('message bekommen', message, driveVoters);
-        if (['ff', 'f', 'r', 'l', 'ww', 'w', 'a', 'd', 'b', 's'].includes(message.message) && !driveVoters.includes(message.from)) {
+        if (['ff', 'f', 'r', 'l', 'ww', 'w', 'a', 'd', 'b', 's'].includes(normalizedMessage) && !driveVoters.includes(message.from)) {
             // collect votes
-            driveDict[message.message] += 1;
+            driveDict[normalizedMessage] += 1;
             driveVoters.push(message.from);
-            console.log("Vote", message.from, " voted for ", message.message, " Count ", driveDict);
-        } else if (['c', 'z', 'u', 'i', 'h', 'j', 'k'].includes(message.message) && !camVoters.includes(message.from)) {
+            console.log("Vote", message.from, " voted for ", normalizedMessage, " Count ", driveDict);
+        } else if (['c', 'z', 'u', 'i', 'h', 'j', 'k'].includes(normalizedMessage) && !camVoters.includes(message.from)) {
             // collect votes
-            camDict[message.message] += 1;
+            camDict[normalizedMessage] += 1;
             camVoters.push(message.from);
-            console.log("Vote", message.from, " voted for ", message.message, " Count ", camDict);
+            console.log("Vote", message.from, " voted for ", normalizedMessage, " Count ", camDict);
         }
     } else {
         console.log("message ignored")
@@ -46,6 +47,11 @@ window.setInterval(function () { count_cam_votes_and_cam() }, 1500);
 window.setInterval(function () {
     console.log('send message');
     api.executeCommand('sendChatMessage', 'Hallo, ich bin Robby Car. Wie ihr mich bedienen könnt findet ihr auf https://world.naturkunde.museum/tafeln/robby\n\nBitte schaltet eure Kameras aus, damit ich mich besser auf das Museum konzentrieren kann.');
+    api.isModerationOn(mediaType).then(isModerationOn => {
+        if (isModerationOn) {
+             api.executeCommand('muteEveryone', 'video');
+        }
+    });
 }, 300000);
 window.setInterval(function () {
     api.isVideoMuted().then(muted => {
