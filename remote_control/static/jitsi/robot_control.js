@@ -47,13 +47,9 @@ window.setInterval(function () { count_cam_votes_and_cam() }, 1500);
 window.setInterval(function () {
     console.log('send message');
     api.executeCommand('sendChatMessage', 'Hallo, ich bin Robby Car. Wie ihr mich bedienen könnt findet ihr auf https://world.naturkunde.museum/tafeln/robby\n\nBitte schaltet eure Kameras aus, damit ich mich besser auf das Museum konzentrieren kann.');
-    api.isModerationOn(mediaType).then(isModerationOn => {
-        if (isModerationOn) {
-             api.executeCommand('muteEveryone', 'video');
-        }
-    });
 }, 300000);
 window.setInterval(function () {
+    api.executeCommand('muteEveryone', 'video');
     api.isVideoMuted().then(muted => {
         if (muted && cameraShouldBeEnabled) {
             api.executeCommand('toggleVideo');
