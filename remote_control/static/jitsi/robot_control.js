@@ -103,6 +103,7 @@ function handleAdminMessages(message) {
             } else {
                 answer += '\n\nMan könnte fast sagen, ich langweile mich.';
             }
+            answer += '\n\nDu kannst mich unter http://' + data.wifiIp +  ':8000/ erreichen und manuell steuern'
             api.executeCommand('sendChatMessage', answer, message.from);
         });
         console.log('would do ', message.message, ' from ', message.nick);
