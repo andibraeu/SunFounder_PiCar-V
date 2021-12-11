@@ -26,6 +26,10 @@ class Status(object):
 
     def shutdown(self):
         os.system('sudo shutdown -h +1')
+        self.status['action'] = "Shutdown initiated"
+        return self.status
 
     def reboot(self):
         os.system('sudo shutdown -r +1')
+        self.status['action'] = "Reboot initiated"
+        return self.status
