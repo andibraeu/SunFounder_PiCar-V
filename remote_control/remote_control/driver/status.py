@@ -21,7 +21,7 @@ class Status(object):
     def health(self):
         self.status['cpuTemp'] = CPUTemperature().temperature
         self.status['load'] = LoadAverage(max_load_average=2).load_average
-        self.status['wifiIp'] = os.system('hostname -I')
+        self.status['wifiIp'] = os.system('sudo hostname -I')
         return self.status
 
     def shutdown(self):
