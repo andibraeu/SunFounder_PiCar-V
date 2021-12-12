@@ -59,7 +59,7 @@ window.setInterval(function () {
 
 api.addListener('participantLeft', function () {
     console.log('da ging jemand');
-    if (api.getNumberOfParticipants() == 1) {
+    if (api.getParticipantsInfo().length == 1) {
         api.isVideoMuted().then(muted => {
             console.log('muted: ' + muted);
             if (!muted) {
@@ -72,7 +72,7 @@ api.addListener('participantLeft', function () {
 
 api.addListener('participantJoined', function () {
     console.log('da kam jemand');
-    if (api.getNumberOfParticipants() > 1) {
+    if (api.getParticipantsInfo().length > 1) {
         api.isVideoMuted().then(muted => {
             console.log('muted: ' + muted);
             if (muted) {
