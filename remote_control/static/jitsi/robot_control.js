@@ -83,6 +83,12 @@ api.addListener('participantJoined', function () {
     }
 });
 
+api.on('participantKickedOut', (message) => {
+    if (message.kicked.local) {
+        console.log('someone kicked me! Let\'s reload!');
+        fetch('http://localhost:8001/reload');
+    }
+});
 
 function handleAdminMessages(message) {
     console.log('wichtige nachricht bekommen');
