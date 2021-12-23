@@ -92,9 +92,10 @@ api.on('participantKickedOut', (message) => {
 
 function handleAdminMessages(message) {
     console.log('wichtige nachricht bekommen');
-    if (['enable', 'disable'].includes(message.message)) {
+    let normalizedMessage = message.message.toLowerCase();
+    if (['enable', 'disable'].includes(normalizedMessage)) {
         enableOrDisableRobot(message);
-    } else if (['health'].includes(message.message)) {
+    } else if (['health'].includes(normalizedMessage)) {
         fetch("http://" + robotIP + "/status/?action=health")
         .then(response => response.json())
         .then(function (data) {
@@ -112,8 +113,8 @@ function handleAdminMessages(message) {
             answer += '\n\nDu kannst mich unter http://' + data.wifiIp +  ':8000/ erreichen und manuell steuern'
             api.executeCommand('sendChatMessage', answer, message.from);
         });
-        console.log('would do ', message.message, ' from ', message.nick);
-    } else if (['restart_cam'].includes(message.message)) {
+        console.log('would do ', normalizedMessage, ' from ', message.nick);
+    } else if (['restart_cam'].includes(normalizedMessage)) {
         api.isVideoMuted().then(muted => {
             if (!muted) {
                 api.executeCommand('toggleVideo');
@@ -124,12 +125,12 @@ function handleAdminMessages(message) {
                 api.executeCommand('sendChatMessage', "Die Kamera wurde gestartet", message.from);
             }
         });
-    } else if (['reboot', 'reset'].includes(message.message)) {
+    } else if (['reboot', 'reset'].includes(normalizedMessage)) {
         fetch("http://" + robotIP + "/status/?action=reboot")
         .then(function () {
             api.executeCommand('sendChatMessage', 'Ich bin durcheinander und starte deswegen mal neu! Bis gleich!', '', true)
         })
-    } else if (['shutdown'].includes(message.message)) {
+    } else if (['shutdown'].includes(normalizedMessage)) {
         fetch("http://" + robotIP + "/status/?action=shutdown")
         .then(function () {
             api.executeCommand('sendChatMessage', 'Schluss für heute! Ich lege mich jetzt schlafen!', '', true)
